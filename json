@@ -1,0 +1,18 @@
+{
+  "region": "tw",
+  "products": [
+    {
+      "model": "iphone17pro",
+      "color": "orange",
+      "capacity": "256gb"
+    }
+  ],
+  "stores": ["R401", "R425"],
+  "interval": 600,
+  "notification": {
+    "bark": {
+      "enabled": true,
+      "url": "https://api.day.app/31d531f61ded93fd8884969a60bf595ee94631c3475ffeadd534bc2864993f79/"
+    }
+  }
+}
