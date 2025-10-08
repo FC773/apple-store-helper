@@ -1,4 +1,4 @@
-name: iPhone 17 Pro 宇宙橙 256GB 補貨監控
+name: iPhone 17 Pro 補貨監控 (防錯版)
 
 on:
   schedule:
@@ -10,26 +10,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 檢查 Apple 官網庫存
+      - name: 安裝工具
         run: |
-          # 安裝必要的工具
           sudo apt-get update
           sudo apt-get install -y curl jq
 
-          # 設定參數
+      - name: 檢查 Apple 官網庫存
+        run: |
+          set -e
+          set -o pipefail
+
           REGION="tw"
           MODEL="iphone17pro"
           COLOR="orange"
           CAPACITY="256gb"
-          STORES=("R401" "R425")  # 台北 101 和信義 A13 兩家直營店
+          STORES=("R401" "R425")  # 台北 101 與信義 A13
           BARK_URL="https://api.day.app/31d531f61ded93fd8884969a60bf595ee94631c3475ffeadd534bc2864993f79/"
 
-          # 檢查庫存
           for STORE in "${STORES[@]}"; do
-            RESPONSE=$(curl -s "https://www.apple.com/tw/shop/retail/${STORE}/availability.json?product=${MODEL}&color=${COLOR}&capacity=${CAPACITY}")
-            STOCK=$(echo "$RESPONSE" | jq '.availability')
+            RESPONSE=$(curl -s "https://www.apple.com/tw/shop/retail/${STORE}/availability.json?product=${MODEL}&color=${COLOR}&capacity=${CAPACITY}" || echo "")
+            
+            if [[ -z "$RESPONSE" ]]; then
+              echo "⚠️ ${STORE} 沒有回應，跳過..."
+              continue
+            fi
+
+            # jq 解析失敗不會終止 workflow
+            STOCK=$(echo "$RESPONSE" | jq -r '.availability // empty' || echo "")
+            
             if [[ "$STOCK" == "true" ]]; then
               MESSAGE="🎉 ${STORE} 有貨！"
-              curl -s "${BARK_URL}${MESSAGE}"
+              echo "$MESSAGE"
+              curl -s "${BARK_URL}${MESSAGE}" || echo "⚠️ Bark 推播失敗"
+            else
+              echo "${STORE} 無庫存"
             fi
           done
