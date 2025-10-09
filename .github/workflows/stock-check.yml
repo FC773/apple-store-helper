@@ -22,7 +22,7 @@ jobs:
 
           REGION="tw"
           MODEL="iphone17pro"
-          COLOR="orange"
+          COLOR="Cosmic Orange"
           CAPACITY="256gb"
           STORES=("R401" "R425")  # 台北 101 與信義 A13
           BARK_URL="https://api.day.app/31d531f61ded93fd8884969a60bf595ee94631c3475ffeadd534bc2864993f79/"
