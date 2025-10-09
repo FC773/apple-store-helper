@@ -25,7 +25,7 @@ jobs:
           COLOR="Cosmic Orange"
           CAPACITY="256gb"
           STORES=("R401" "R425")  # 台北 101 與信義 A13
-          BARK_URL="https://api.day.app/31d531f61ded93fd8884969a60bf595ee94631c3475ffeadd534bc2864993f79/"
+          BARK_URL="https://api.day.app/fCtWkmJgw7JE4w9DdBTjPK/"
 
           for STORE in "${STORES[@]}"; do
             RESPONSE=$(curl -s "https://www.apple.com/tw/shop/retail/${STORE}/availability.json?product=${MODEL}&color=${COLOR}&capacity=${CAPACITY}" || echo "")
